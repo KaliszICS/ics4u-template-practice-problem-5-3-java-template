@@ -6,10 +6,68 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-class AnimalReflectionTest {
+class PracticeProblemTest {
 
     @Test
-    @DisplayName("Check if Animal class exists")
+    @DisplayName("Check proper implementation of abstract methods")
+    void testAbstractMethodImplementation() {
+        try {
+            Class<?> animalClass = Class.forName("Animal");
+            Class<?> catClass = Class.forName("Cat");
+            Class<?> birdClass = Class.forName("Bird");
+            Class<?> bearClass = Class.forName("Bear");
+            
+            // Check that animalSound is abstract in Animal
+            Method animalSoundInAnimal = animalClass.getDeclaredMethod("animalSound");
+            assertTrue(Modifier.isAbstract(animalSoundInAnimal.getModifiers()), 
+                    "animalSound should be abstract in Animal class");
+            
+            // Check that animalSound is implemented (not abstract) in each subclass
+            Method animalSoundInCat = catClass.getDeclaredMethod("animalSound");
+            assertFalse(Modifier.isAbstract(animalSoundInCat.getModifiers()), 
+                    "animalSound should be implemented in Cat class");
+            
+            Method animalSoundInBird = birdClass.getDeclaredMethod("animalSound");
+            assertFalse(Modifier.isAbstract(animalSoundInBird.getModifiers()), 
+                    "animalSound should be implemented in Bird class");
+            
+            Method animalSoundInBear = bearClass.getDeclaredMethod("animalSound");
+            assertFalse(Modifier.isAbstract(animalSoundInBear.getModifiers()), 
+                    "animalSound should be implemented in Bear class");
+            
+        } catch (ClassNotFoundException e) {
+            fail("Required class does not exist: " + e.getMessage());
+        } catch (NoSuchMethodException e) {
+            fail("Required method does not exist: " + e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Check Animal inheritance structure")
+    void testAnimalInheritanceStructure() {
+        try {
+            Class<?> animalClass = Class.forName("Animal");
+            Class<?> catClass = Class.forName("Cat");
+            Class<?> birdClass = Class.forName("Bird");
+            Class<?> bearClass = Class.forName("Bear");
+            
+            // Check that Animal is the parent of all three classes
+            assertEquals(animalClass, catClass.getSuperclass(), "Cat should directly extend Animal");
+            assertEquals(animalClass, birdClass.getSuperclass(), "Bird should directly extend Animal");
+            assertEquals(animalClass, bearClass.getSuperclass(), "Bear should directly extend Animal");
+            
+            // Check that Animal is abstract but subclasses are not
+            assertTrue(Modifier.isAbstract(animalClass.getModifiers()), "Animal class should be abstract");
+            assertFalse(Modifier.isAbstract(catClass.getModifiers()), "Cat class should not be abstract");
+            assertFalse(Modifier.isAbstract(birdClass.getModifiers()), "Bird class should not be abstract");
+            assertFalse(Modifier.isAbstract(bearClass.getModifiers()), "Bear class should not be abstract");
+        } catch (ClassNotFoundException e) {
+            fail("Required class does not exist: " + e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Check if Animal class exists and is abstract")
     void testAnimalClassExists() {
         try {
             Class<?> animalClass = Class.forName("Animal");
@@ -76,12 +134,17 @@ class AnimalReflectionTest {
     }
 
     @Test
-    @DisplayName("Check if Cat class exists and extends Animal")
+    @DisplayName("Check if Cat class exists and properly extends Animal")
     void testCatClassExists() {
         try {
             Class<?> catClass = Class.forName("Cat");
             Class<?> animalClass = Class.forName("Animal");
-            assertTrue(animalClass.isAssignableFrom(catClass), "Cat should extend Animal");
+            
+            // Check direct inheritance
+            assertEquals(animalClass, catClass.getSuperclass(), "Cat should directly extend Animal");
+            
+            // Check that it's not abstract
+            assertFalse(Modifier.isAbstract(catClass.getModifiers()), "Cat class should not be abstract");
         } catch (ClassNotFoundException e) {
             fail("Required class does not exist: " + e.getMessage());
         }
@@ -132,12 +195,17 @@ class AnimalReflectionTest {
     }
 
     @Test
-    @DisplayName("Check if Bird class exists and extends Animal")
+    @DisplayName("Check if Bird class exists and properly extends Animal")
     void testBirdClassExists() {
         try {
             Class<?> birdClass = Class.forName("Bird");
             Class<?> animalClass = Class.forName("Animal");
-            assertTrue(animalClass.isAssignableFrom(birdClass), "Bird should extend Animal");
+            
+            // Check direct inheritance
+            assertEquals(animalClass, birdClass.getSuperclass(), "Bird should directly extend Animal");
+            
+            // Check that it's not abstract
+            assertFalse(Modifier.isAbstract(birdClass.getModifiers()), "Bird class should not be abstract");
         } catch (ClassNotFoundException e) {
             fail("Required class does not exist: " + e.getMessage());
         }
@@ -188,12 +256,17 @@ class AnimalReflectionTest {
     }
 
     @Test
-    @DisplayName("Check if Bear class exists and extends Animal")
+    @DisplayName("Check if Bear class exists and properly extends Animal")
     void testBearClassExists() {
         try {
             Class<?> bearClass = Class.forName("Bear");
             Class<?> animalClass = Class.forName("Animal");
-            assertTrue(animalClass.isAssignableFrom(bearClass), "Bear should extend Animal");
+            
+            // Check direct inheritance
+            assertEquals(animalClass, bearClass.getSuperclass(), "Bear should directly extend Animal");
+            
+            // Check that it's not abstract
+            assertFalse(Modifier.isAbstract(bearClass.getModifiers()), "Bear class should not be abstract");
         } catch (ClassNotFoundException e) {
             fail("Required class does not exist: " + e.getMessage());
         }
@@ -243,3 +316,4 @@ class AnimalReflectionTest {
         }
     }
 }
+
